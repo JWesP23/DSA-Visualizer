@@ -20,12 +20,17 @@ def selection_sort(list_to_sort: List, speed= 1, ascending: bool = True) -> List
     for i in range(len(list_to_sort) - 1):
         min_index = i
         sorting_vis.render_array(list_to_sort, [i], speed= speed)
+        st.write(f"Searching for a value less than {list_to_sort[i]}")
         for j in range(i, len(list_to_sort)):
             sorting_vis.render_array(list_to_sort, [i, j], [min_index], speed= speed)
             if (list_to_sort[j] < list_to_sort[min_index] and ascending) or (list_to_sort[j] > list_to_sort[min_index] and not ascending):
+                st.write(f"Value less than {list_to_sort[min_index]} found")
                 min_index = j
+                st.write(f"Searching for a value less than {list_to_sort[min_index]}")
                 sorting_vis.render_array(list_to_sort, [i], [min_index], speed= speed)
+        st.write(f"No value less than {list_to_sort[min_index]} found")
 
+        st.write(f"Assigning {list_to_sort[min_index]} to first unsorted index")
         sorting_vis.render_array(list_to_sort, swap_indices= [i, min_index], speed= speed)
         swap(list_to_sort, i, min_index)
         sorting_vis.render_array(list_to_sort, swap_indices= [i, min_index], speed= speed)
@@ -48,9 +53,14 @@ def bubble_sort(list_to_sort: List, speed= 1, ascending: bool = True) -> List:
                 sorting_vis.render_array(list_to_sort, swap_indices= [j, j + 1], speed= speed)
                 swap(list_to_sort, j, j+1)
                 sorting_vis.render_array(list_to_sort, swap_indices= [j, j + 1], speed= speed)
-
+        if 0 < i < list_length - 2:
+            st.write(f"The last {i + 1} values are in their final sorted positions")
+        elif i == 0:
+            st.write(f"The last value is in its final sorted position")
+        else:
+            st.write(f"All values are in their final sorted positions")
         if not swap_occurred: #exit loop if no swaps occur on a full pass through (list is sorted)
-            st.write("No Swap Occurred This Loop So Array Is Sorted")
+            st.write("No swap occurred in this loop so the array is sorted")
             break
 
     return list_to_sort
@@ -85,8 +95,16 @@ def insertion_sort(list_to_sort: List, speed= 1, ascending: bool = True) -> List
     for i in range(1, list_length):
         value = list_to_sort[i]
         sorting_vis.render_array(list_to_sort, highlight_indices= [i], speed= speed)
-        if list_to_sort[i-1] < value: #Triggers a highlight to denote a comparison occurred which would not show up inside the while loop (unnecessary for algorithm, just for animation)
+
+        sorting_necessary = True #Only needed for animation
+
+        if list_to_sort[i-1] <= value: #Triggers a highlight to denote a comparison occurred which would not show up inside the while loop (unnecessary for algorithm, just for animation)
             sorting_vis.render_array(list_to_sort, highlight_indices= [i, i - 1], speed= speed)
+            st.write(f"{value} is already sorted within the sub-array (from index 0 to index {i})")
+            sorting_necessary = False
+        else:
+            st.write(f"Swap {value} backward until the sub-array (from index 0 to index {i}) is sorted")
+
         while i > 0 and list_to_sort[i-1] > value:
             sorting_vis.render_array(list_to_sort, highlight_indices= [i, i - 1], speed= speed)
             sorting_vis.render_array(list_to_sort, swap_indices= [i, i - 1], speed= speed)
@@ -95,9 +113,14 @@ def insertion_sort(list_to_sort: List, speed= 1, ascending: bool = True) -> List
             i -= 1
             if list_to_sort[i-1] < value: #Triggers a highlight to denote a comparison occurred between the target value and the first element smaller than the target value in the sub-array (unnecessary for algorithm, just for animation)
                 sorting_vis.render_array(list_to_sort, highlight_indices= [i, i - 1], speed= speed)
+
         if list_to_sort[i] != value: #if statement is unnecessary for algorithm but needed for animation
+            st.write(f"Place {value} into its correct position in the sub-array")
             list_to_sort[i] = value
             sorting_vis.render_array(list_to_sort, swap_indices= [i], speed= speed)
+
+        if sorting_necessary:
+            st.write(f"{value} is now sorted within the sub-array")
 
     if not ascending:
         list_to_sort.reverse()
@@ -110,30 +133,44 @@ def shell_sort(list_to_sort: List, speed= 1, ascending: bool = True) -> List:
 
     list_length = len(list_to_sort)
     gap = list_length // 2
+    st.write(f"Set initial gap to {gap} (list length // 2).")
 
     while gap > 0:
         for i in range(gap, list_length):
             value = list_to_sort[i]
             j = i
 
+            if j >= gap and list_to_sort[j - gap] < value: #For animation purposes only
+                sorting_vis.render_array(list_to_sort, highlight_indices=[j - gap, j], speed= speed)
+                st.write(f"Sub-array (the highlighted indices) is already sorted")
+
+            if j >= gap and list_to_sort[j - gap] > value: #For animation purposes only
+                st.write(f"Swap {value} backward until the sub-array (the highlighted indices) is sorted")
             #Insertion sort on subarray
             while j >= gap and list_to_sort[j - gap] > value:
-                sorting_vis.render_array(list_to_sort, highlight_indices=[j, j - gap], speed= speed)
-                sorting_vis.render_array(list_to_sort, swap_indices=[j, j - gap], speed= speed)
+                sub_array_indices = list(range(i, -1, -gap))
+                sorting_vis.render_array(list_to_sort, highlight_indices=sub_array_indices, speed= speed)
+                sorting_vis.render_array(list_to_sort, highlight_indices=sub_array_indices, swap_indices=[j, j - gap], speed= speed)
                 list_to_sort[j] = list_to_sort[j - gap]
-                sorting_vis.render_array(list_to_sort, swap_indices=[j, j - gap], speed= speed)
+                sorting_vis.render_array(list_to_sort, highlight_indices=sub_array_indices, swap_indices=[j, j - gap], speed= speed)
 
                 j -= gap
 
             if list_to_sort[j] != value:
+                sub_array_indices = list(range(i, -1, -gap))
+                st.write(f"Place {value} into its correct position in the sub-array")
                 list_to_sort[j] = value
-                sorting_vis.render_array(list_to_sort, swap_indices=[j], speed= speed)
+                sorting_vis.render_array(list_to_sort, highlight_indices=sub_array_indices, swap_indices=[j], speed= speed)
 
         #Reduce the gap for the next pass
         if gap == 2:
             gap = 1
+            st.write(f"Gap equals 2 so set gap to 1.")
         else:
             gap = math.floor(gap / 2.2)
+            st.write(f"Set gap to {gap} (current gap // 2.2).")
+
+    st.write(f"Gap equals 0 so algorithm has finished.")
 
     #Reverse if descending order requested
     if not ascending:
@@ -152,12 +189,14 @@ def visual_merge(arr1, arr2, speed= 1):
         if arr1[i] < arr2[j]:
             sorting_vis.render_array(arr1, swap_indices= [i], speed= speed, label= "Array 1")
             sorting_vis.render_array(arr2, highlight_indices= [j], speed= speed, label= "Array 2")
+            st.write(f"{arr1[i]} is less than {arr2[j]}, append {arr1[i]} to the merged array")
             return_arr.append(arr1[i])
             sorting_vis.render_array(return_arr, swap_indices= [len(return_arr) - 1], speed= speed, label= "Merged Array")
             i += 1
         else:
             sorting_vis.render_array(arr1, highlight_indices= [i], speed= speed, label= "Array 1")
             sorting_vis.render_array(arr2, swap_indices= [j], speed= speed, label= "Array 2")
+            st.write(f"{arr2[i]} is less than {arr1[j]}, append {arr2[i]} to the merged array")
             return_arr.append(arr2[j])
             sorting_vis.render_array(return_arr, swap_indices= [len(return_arr) - 1], speed= speed, label= "Merged Array")
             j += 1
@@ -394,74 +433,220 @@ def heap_sort_tree(list_to_sort: List, speed= 1, ascending: bool = True) -> list
 
 
 #Quick Sort (in place) implementation arbitrarily using the first value as the pivot
-def quick_sort_rand_pivot(list_to_sort: List, speed= 1, ascending: bool = True) -> list[Any]:
+def quick_sort_arbitrary_pivot(list_to_sort: List, speed= 1, ascending: bool = True) -> list[Any]:
 
     if len(list_to_sort) <= 1: #base case
+        sorting_vis.render_array_with_pivot(list_to_sort, speed= speed)
+        st.write("This array consists of one element or less so it's sorted")
         return list_to_sort
 
     #choose first element as pivot
+    sorting_vis.render_array_with_pivot(list_to_sort, highlight_indices=[0], speed= speed)
     pivot = list_to_sort[0]
     pivot_index = 0
+    first = 1   #the index of values greater than the pivot starting at the front of the list
+    last = len(list_to_sort) - 1 #the index of values less than the pivot starting at the end of the list
+    st.write("Choose the first element to be the pivot")
+    sorting_vis.render_array_with_pivot(list_to_sort, pivot_index=pivot_index, speed= speed)
+
+    #when first and last markers pass each other swap the pivot with last since last will be less than the pivot (since first passed it)
+    #and every value above last will be greater than the pivot (since last already passed them)
+    while first <= last:
+
+        #find the first element from the start of the list greater than the pivot
+        st.write("Search from left to right for a value greater than or equal to the pivot")
+        sorting_vis.render_array_with_pivot(list_to_sort, highlight_indices=[first, last], pivot_index=pivot_index, speed= speed)
+        while first < len(list_to_sort) - 1 and list_to_sort[first] < pivot:
+            first += 1
+            sorting_vis.render_array_with_pivot(list_to_sort, highlight_indices=[first, last], pivot_index=pivot_index, speed= speed)
+        if list_to_sort[first] > pivot:
+            #ensures up iterator's green highlight doesn't get covered by down iterator's yellow highlight (which gets precedence in sorting_vis.render_array_with_pivot())
+            if last == first:
+                sorting_vis.render_array_with_pivot(list_to_sort, swap_indices=[first], pivot_index=pivot_index, speed= speed)
+            else:
+                sorting_vis.render_array_with_pivot(list_to_sort, highlight_indices=[last], swap_indices=[first], pivot_index=pivot_index, speed= speed)
+            st.write("Value greater than pivot found")
+        else:
+            st.write("No value greater than pivot found or iterator moving up list has passed iterator moving down list")
+
+        #find the last element from the back of the list less than the pivot
+        st.write("Search from right to left for a value less than or equal to the pivot")
+        sorting_vis.render_array_with_pivot(list_to_sort, highlight_indices=[last], swap_indices=[first], pivot_index=pivot_index, speed= speed)
+        while last > 0 and list_to_sort[last] > pivot:
+            last -= 1
+            sorting_vis.render_array_with_pivot(list_to_sort, highlight_indices=[last], swap_indices=[first], pivot_index=pivot_index, speed= speed)
+        if list_to_sort[last] < pivot:
+            sorting_vis.render_array_with_pivot(list_to_sort, swap_indices=[last, first], pivot_index=pivot_index, speed= speed)
+            st.write("Value less than pivot found")
+        else:
+            st.write("No value less than pivot found or iterator moving down list has passed iterator moving up list")
+
+        #swap values at first and last so that values less than pivot are at the front of the list
+        #and values greater than the pivot are at the end of the list
+        if first < last:
+            st.write("Swap values less than and greater than pivot")
+            sorting_vis.render_array_with_pivot(list_to_sort, highlight_indices=[last, first], pivot_index=pivot_index, speed= speed)
+            sorting_vis.render_array_with_pivot(list_to_sort, swap_indices=[last, first], pivot_index=pivot_index, speed= speed)
+            swap(list_to_sort, first, last)
+            sorting_vis.render_array_with_pivot(list_to_sort, swap_indices=[last, first], pivot_index=pivot_index, speed= speed)
+        else:
+            st.write("Iterator moving up and iterator moving down have passed each other")
+            break
+
+    #this swap ensures pivot is in the correct place in the array, with all smaller values to its left
+    #and all larger values to its right
+    st.write("Swap pivot with the last value less than the pivot")
+    sorting_vis.render_array_with_pivot(list_to_sort, highlight_indices=[last, pivot_index], speed= speed)
+    sorting_vis.render_array_with_pivot(list_to_sort, swap_indices=[last, pivot_index], speed= speed)
+    swap(list_to_sort, pivot_index, last)
+    sorting_vis.render_array_with_pivot(list_to_sort, swap_indices=[last, pivot_index], speed= speed)
+    pivot_index = last
+    sorting_vis.render_array_with_pivot(list_to_sort, pivot_index=pivot_index, speed= speed)
+
+    #recursively sort the left and right halves of the array (minus the pivot which is already in its sorted position)
+    st.write("The pivot is now in its sorted position")
+    st.write("Recursively sort the arrays to the left and right of the pivot")
+    sorting_vis.render_array_with_pivot(list_to_sort, highlight_indices=[range(0, pivot_index)], pivot_index=pivot_index, speed= speed)
+    left = quick_sort_arbitrary_pivot(list_to_sort[:pivot_index])
+    sorting_vis.render_array_with_pivot(list_to_sort, highlight_indices=[range(pivot_index + 1, len(list_to_sort))], pivot_index=pivot_index, speed= speed)
+    right = quick_sort_arbitrary_pivot(list_to_sort[pivot_index + 1:])
+
+    return left + [list_to_sort[pivot_index]] + right
+
+
+#Quick Sort implementation using a random value as the pivot
+def quick_sort_rand_pivot(list_to_sort: List, speed= 1, ascending: bool = True) -> list[Any]:
+
+    if len(list_to_sort) <= 1: #base case
+        sorting_vis.render_array_with_pivot(list_to_sort, speed= speed)
+        st.write("This array consists of one element or less so it's sorted")
+        return list_to_sort
+
+    #choose random element as pivot
+    st.write("Choose a random element as the pivot")
+    pivot_index = random.randint(0, len(list_to_sort) - 1)
+    sorting_vis.render_array_with_pivot(list_to_sort, highlight_indices=[pivot_index], speed= speed)
+    sorting_vis.render_array_with_pivot(list_to_sort, pivot_index=pivot_index, speed= speed)
+    pivot = list_to_sort[pivot_index]
+    st.write("Move pivot to index 0")
+    sorting_vis.render_array_with_pivot(list_to_sort, highlight_indices=[0, pivot_index], speed= speed)
+    sorting_vis.render_array_with_pivot(list_to_sort, swap_indices=[0, pivot_index], speed= speed)
+    swap(list_to_sort, 0, pivot_index)
+    sorting_vis.render_array_with_pivot(list_to_sort, swap_indices=[0, pivot_index], speed= speed)
+    pivot_index = 0
+    sorting_vis.render_array_with_pivot(list_to_sort, pivot_index=pivot_index, speed= speed)
     first = 1   #the index of values greater than the pivot starting at the front of the list
     last = len(list_to_sort) - 1 #the index of values less than the pivot starting at the end of the list
 
     #when first and last markers pass each other swap the pivot with last since last will be less than the pivot (since first passed it)
     #and every value above last will be greater than the pivot (since last already passed them)
     while first <= last:
+
         #find the first element from the start of the list greater than the pivot
+        st.write("Search from left to right for a value greater than or equal to the pivot")
+        sorting_vis.render_array_with_pivot(list_to_sort, highlight_indices=[first, last], pivot_index=pivot_index, speed= speed)
         while first < len(list_to_sort) - 1 and list_to_sort[first] < pivot:
             first += 1
+            sorting_vis.render_array_with_pivot(list_to_sort, highlight_indices=[first, last], pivot_index=pivot_index, speed= speed)
+        if list_to_sort[first] > pivot:
+            #ensures up iterator's green highlight doesn't get covered by down iterator's yellow highlight (which gets precedence in sorting_vis.render_array_with_pivot())
+            if last == first:
+                sorting_vis.render_array_with_pivot(list_to_sort, swap_indices=[first], pivot_index=pivot_index, speed= speed)
+            else:
+                sorting_vis.render_array_with_pivot(list_to_sort, highlight_indices=[last], swap_indices=[first], pivot_index=pivot_index, speed= speed)
+            st.write("Value greater than pivot found")
+        else:
+            st.write("No value greater than pivot found or iterator moving up list has passed iterator moving down list")
+
         #find the last element from the back of the list less than the pivot
+        st.write("Search from right to left for a value less than or equal to the pivot")
+        sorting_vis.render_array_with_pivot(list_to_sort, highlight_indices=[last], swap_indices=[first], pivot_index=pivot_index, speed= speed)
         while last > 0 and list_to_sort[last] > pivot:
             last -= 1
+            sorting_vis.render_array_with_pivot(list_to_sort, highlight_indices=[last], swap_indices=[first], pivot_index=pivot_index, speed= speed)
+        if list_to_sort[last] < pivot:
+            sorting_vis.render_array_with_pivot(list_to_sort, swap_indices=[last, first], pivot_index=pivot_index, speed= speed)
+            st.write("Value less than pivot found")
+        else:
+            st.write("No value less than pivot found or iterator moving down list has passed iterator moving up list")
 
         #swap values at first and last so that values less than pivot are at the front of the list
         #and values greater than the pivot are at the end of the list
         if first < last:
+            st.write("Swap values less than and greater than pivot")
+            sorting_vis.render_array_with_pivot(list_to_sort, highlight_indices=[last, first], pivot_index=pivot_index, speed= speed)
+            sorting_vis.render_array_with_pivot(list_to_sort, swap_indices=[last, first], pivot_index=pivot_index, speed= speed)
             swap(list_to_sort, first, last)
+            sorting_vis.render_array_with_pivot(list_to_sort, swap_indices=[last, first], pivot_index=pivot_index, speed= speed)
         else:
+            st.write("Iterator moving up and iterator moving down have passed each other")
             break
 
     #this swap ensures pivot is in the correct place in the array, with all smaller values to its left
     #and all larger values to its right
+    st.write("Swap pivot with the last value less than the pivot")
+    sorting_vis.render_array_with_pivot(list_to_sort, highlight_indices=[last, pivot_index], speed= speed)
+    sorting_vis.render_array_with_pivot(list_to_sort, swap_indices=[last, pivot_index], speed= speed)
     swap(list_to_sort, pivot_index, last)
+    sorting_vis.render_array_with_pivot(list_to_sort, swap_indices=[last, pivot_index], speed= speed)
     pivot_index = last
+    sorting_vis.render_array_with_pivot(list_to_sort, pivot_index=pivot_index, speed= speed)
 
     #recursively sort the left and right halves of the array (minus the pivot which is already in its sorted position)
+    st.write("The pivot is now in its sorted position")
+    st.write("Recursively sort the arrays to the left and right of the pivot")
+    sorting_vis.render_array_with_pivot(list_to_sort, highlight_indices=[range(0, pivot_index)], pivot_index=pivot_index, speed= speed)
     left = quick_sort_rand_pivot(list_to_sort[:pivot_index])
+    sorting_vis.render_array_with_pivot(list_to_sort, highlight_indices=[range(pivot_index + 1, len(list_to_sort))], pivot_index=pivot_index, speed= speed)
     right = quick_sort_rand_pivot(list_to_sort[pivot_index + 1:])
 
     return left + [list_to_sort[pivot_index]] + right
-
 
 
 #Quick Sort (in place) implementation that chooses a pivot more intelligently
 def quick_sort_smart_pivot(list_to_sort: List, speed= 1, ascending: bool = True) -> list[Any]:
 
     if len(list_to_sort) <= 1: #base case
+        sorting_vis.render_array_with_pivot(list_to_sort, speed= speed)
+        st.write("This array consists of one element or less so it's sorted")
         return list_to_sort
 
     #choose median between first, middle, and last elements in array to be the pivot
+    st.write("Find the median between first, middle, and last elements in array")
+    sorting_vis.render_array_with_pivot(list_to_sort, highlight_indices=[0, len(list_to_sort) // 2, len(list_to_sort) - 1], speed= speed)
     first_element = list_to_sort[0]
     middle_element = list_to_sort[len(list_to_sort) // 2]
     last_element = list_to_sort[-1]
     pivots = [first_element, middle_element, last_element]
     pivots.sort()
 
-    #best pivot is the first element
+    st.write("Choose the median element to be the pivot")
+    #median is the first element
     if pivots[1] == first_element:
         pivot = first_element
-        pivot_index = 0
-    #best pivot is the middle element
+    #median is the middle element
     elif pivots[1] == middle_element:
         pivot = middle_element
         pivot_index = len(list_to_sort) // 2
+        sorting_vis.render_array_with_pivot(list_to_sort, pivot_index= pivot_index, speed= speed)
+        st.write("Move pivot to index 0")
+        sorting_vis.render_array_with_pivot(list_to_sort, highlight_indices=[0, pivot_index], speed= speed)
+        sorting_vis.render_array_with_pivot(list_to_sort, swap_indices=[0, pivot_index], speed= speed)
         swap(list_to_sort, 0, pivot_index)
-    #best pivot is the last element
+        sorting_vis.render_array_with_pivot(list_to_sort, swap_indices=[0, pivot_index], speed= speed)
+    #median is the last element
     else:
         pivot = last_element
         pivot_index = len(list_to_sort) - 1
+        sorting_vis.render_array_with_pivot(list_to_sort, pivot_index= pivot_index, speed= speed)
+        st.write("Move pivot to index 0")
+        sorting_vis.render_array_with_pivot(list_to_sort, highlight_indices=[0, pivot_index], speed= speed)
+        sorting_vis.render_array_with_pivot(list_to_sort, swap_indices=[0, pivot_index], speed= speed)
         swap(list_to_sort, 0, pivot_index)
+        sorting_vis.render_array_with_pivot(list_to_sort, swap_indices=[0, pivot_index], speed= speed)
+
+    pivot_index = 0
+    sorting_vis.render_array_with_pivot(list_to_sort, pivot_index= pivot_index, speed= speed)
 
     first = 1   #the index of values greater than the pivot starting at the front of the list
     last = len(list_to_sort) - 1 #the index of values less than the pivot starting at the end of the list
@@ -469,32 +654,63 @@ def quick_sort_smart_pivot(list_to_sort: List, speed= 1, ascending: bool = True)
     #when first and last markers pass each other swap the pivot with last since last will be less than the pivot (since first passed it)
     #and every value above last will be greater than the pivot (since last already passed them)
     while first <= last:
+
         #find the first element from the start of the list greater than the pivot
+        st.write("Search from left to right for a value greater than or equal to the pivot")
+        sorting_vis.render_array_with_pivot(list_to_sort, highlight_indices=[first, last], pivot_index=pivot_index, speed= speed)
         while first < len(list_to_sort) - 1 and list_to_sort[first] < pivot:
             first += 1
+            sorting_vis.render_array_with_pivot(list_to_sort, highlight_indices=[first, last], pivot_index=pivot_index, speed= speed)
+        if list_to_sort[first] > pivot:
+            #ensures up iterator's green highlight doesn't get covered by down iterator's yellow highlight (which gets precedence in sorting_vis.render_array_with_pivot())
+            if last == first:
+                sorting_vis.render_array_with_pivot(list_to_sort, swap_indices=[first], pivot_index=pivot_index, speed= speed)
+            else:
+                sorting_vis.render_array_with_pivot(list_to_sort, highlight_indices=[last], swap_indices=[first], pivot_index=pivot_index, speed= speed)
+            st.write("Value greater than pivot found")
+        else:
+            st.write("No value greater than pivot found or iterator moving up list has passed iterator moving down list")
+
         #find the last element from the back of the list less than the pivot
+        st.write("Search from right to left for a value less than or equal to the pivot")
+        sorting_vis.render_array_with_pivot(list_to_sort, highlight_indices=[last], swap_indices=[first], pivot_index=pivot_index, speed= speed)
         while last > 0 and list_to_sort[last] > pivot:
             last -= 1
+            sorting_vis.render_array_with_pivot(list_to_sort, highlight_indices=[last], swap_indices=[first], pivot_index=pivot_index, speed= speed)
+        if list_to_sort[last] < pivot:
+            sorting_vis.render_array_with_pivot(list_to_sort, swap_indices=[last, first], pivot_index=pivot_index, speed= speed)
+            st.write("Value less than pivot found")
+        else:
+            st.write("No value less than pivot found or iterator moving down list has passed iterator moving up list")
 
         #swap values at first and last so that values less than pivot are at the front of the list
         #and values greater than the pivot are at the end of the list
         if first < last:
+            st.write("Swap values less than and greater than pivot")
+            sorting_vis.render_array_with_pivot(list_to_sort, highlight_indices=[last, first], pivot_index=pivot_index, speed= speed)
+            sorting_vis.render_array_with_pivot(list_to_sort, swap_indices=[last, first], pivot_index=pivot_index, speed= speed)
             swap(list_to_sort, first, last)
+            sorting_vis.render_array_with_pivot(list_to_sort, swap_indices=[last, first], pivot_index=pivot_index, speed= speed)
         else:
+            st.write("Iterator moving up and iterator moving down have passed each other")
             break
 
     #this swap ensures pivot is in the correct place in the array, with all smaller values to its left
     #and all larger values to its right
+    st.write("Swap pivot with the last value less than the pivot")
+    sorting_vis.render_array_with_pivot(list_to_sort, highlight_indices=[last, pivot_index], speed= speed)
+    sorting_vis.render_array_with_pivot(list_to_sort, swap_indices=[last, pivot_index], speed= speed)
     swap(list_to_sort, pivot_index, last)
+    sorting_vis.render_array_with_pivot(list_to_sort, swap_indices=[last, pivot_index], speed= speed)
     pivot_index = last
+    sorting_vis.render_array_with_pivot(list_to_sort, pivot_index=pivot_index, speed= speed)
 
     #recursively sort the left and right halves of the array (minus the pivot which is already in its sorted position)
-    left = quick_sort_rand_pivot(list_to_sort[:pivot_index])
-    right = quick_sort_rand_pivot(list_to_sort[pivot_index + 1:])
+    st.write("The pivot is now in its sorted position")
+    st.write("Recursively sort the arrays to the left and right of the pivot")
+    sorting_vis.render_array_with_pivot(list_to_sort, highlight_indices=[range(0, pivot_index)], pivot_index=pivot_index, speed= speed)
+    left = quick_sort_smart_pivot(list_to_sort[:pivot_index])
+    sorting_vis.render_array_with_pivot(list_to_sort, highlight_indices=[range(pivot_index + 1, len(list_to_sort))], pivot_index=pivot_index, speed= speed)
+    right = quick_sort_smart_pivot(list_to_sort[pivot_index + 1:])
 
     return left + [list_to_sort[pivot_index]] + right
-
-test = [random.randint(-100, 100) for _ in range(10)]
-print(test)
-test = quick_sort_smart_pivot(test)
-print(test)

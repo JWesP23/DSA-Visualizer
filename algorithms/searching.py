@@ -17,6 +17,7 @@ def sequential_search(list_to_search: List, value, speed= 1):
             return i
 
     searching_vis.render_array(list_to_search, not_found= True, speed= speed)
+    st.write(f"The value {value} is not in the array")
     return None     #value not in array
 
 
@@ -32,11 +33,15 @@ def binary_search(list_to_search: List, value, speed=1):
         searching_vis.render_array(list_to_search, highlight_indices=[mid], speed= speed)
         if list_to_search[mid] == value:
             searching_vis.render_array(list_to_search, selected_indices= [mid], speed= speed)
+            st.write(f"The value {value} has been found")
             return mid
         elif list_to_search[mid] > value:
             high = mid - 1
+            st.write(f"{value} is less than {list_to_search[mid]}, search the left half of the sub-array")
         else:
             low = mid + 1
+            st.write(f"{value} is greater than {list_to_search[mid]}, search the right half of the sub-array")
 
     searching_vis.render_array(list_to_search, not_found= True, speed= speed)
+    st.write(f"The value {value} is not in the array")
     return None

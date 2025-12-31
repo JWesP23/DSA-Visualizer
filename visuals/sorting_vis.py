@@ -12,10 +12,10 @@ def generate_array(size):
 def render_array(array, highlight_indices= None, swap_indices= None, speed= 1, label= None):
     boxes = ""
     for i, val in enumerate(array):
-        if highlight_indices and i in highlight_indices:
-            color = "#99FFCC"
-        elif swap_indices and i in swap_indices:
+        if swap_indices and i in swap_indices:
             color = "#00CC66"
+        elif highlight_indices and i in highlight_indices:
+            color = "#99FFCC"
         else:
             color = "#00CCCC"
         boxes += f"<div class='box' style='background-color:{color}'>{val}</div>"
@@ -53,7 +53,51 @@ def render_array(array, highlight_indices= None, swap_indices= None, speed= 1, l
     if speed != "Instant":
         time.sleep(1 / speed)
 
+def render_array_with_pivot(array, highlight_indices= None, swap_indices= None, pivot_index= None, speed= 1, label= None):
+    boxes = ""
+    for i, val in enumerate(array):
+        if highlight_indices and i in highlight_indices:
+            color = "#99FFCC"
+        elif swap_indices and i in swap_indices:
+            color = "#00CC66"
+        elif pivot_index is not None and i == pivot_index:
+            color = "#4895EF"
+        else:
+            color = "#00CCCC"
+        boxes += f"<div class='box' style='background-color:{color}'>{val}</div>"
 
+    label_html = f"<div class='array-label'>{label}</div>" if label else ""
+
+    st.markdown(
+        f"""
+        <style>
+        .array-container {{
+            white-space: nowrap;  /* keeps boxes on one line */
+            overflow-x: auto;      /* allows scrolling if too wide */
+            padding: 10px 0;
+        }}
+        .box {{
+            display: inline-block;
+            width: 50px;
+            height: 50px;
+            line-height: 50px;
+            border: 2px solid #FFFFFF;
+            color: #000000;
+            text-align: center;
+            margin: 2px;
+            border-radius: 8px;
+            font-weight: bold;
+            font-size: 20px;
+        }}
+        </style>
+        {label_html}
+        <div class="array-container">{boxes}</div>
+        """,
+        unsafe_allow_html=True
+    )
+
+    if speed != "Instant":
+        time.sleep(1 / speed)
 
 #For rendering side by side arrays, not capable of highlighting specific indexes with arrays
 def render_merge_step(left, right, speed= 1, separate= True, merge= False):
