@@ -62,7 +62,7 @@ pip package manager
 
 Clone the repository:
 
-git clone {update}
+git clone https://github.com/JWesP23/DSA-Visualizer
 
 cd data-structures-visualizer
 
@@ -100,6 +100,7 @@ DSA-Visualizer/<br>
 ├── data_structures/    # Where data structure representation code will be stored
 ├── pages/              # Where the main page for each element in the sidebar is stored
 ├── visuals/            # Where visualization functions are stored
+├── screenshots/        # Where the screenshots in this file are stored
 ├── requirements.txt    # Dependencies
 ├── README.md           # This file
 └── .gitignore          # Git ignore file
