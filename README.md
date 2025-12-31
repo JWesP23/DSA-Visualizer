@@ -52,6 +52,11 @@ This tool currently supports the following algorithms:
 Dependencies are kept intentionally light to maintain accessibility for students.
 
 ## Getting Started
+
+The easiest way to view this project is through the Streamlit cloud by clicking on this link: https://dsa-visualizer-ec2en446yacdpgrm9gcaxu.streamlit.app/
+
+Otherwise, if you'd like to run this project on your own machine, follow the steps below.
+
 ### Prerequisites
 
 Python 3.9+ installed
