@@ -48,6 +48,7 @@ This tool currently supports the following algorithms:
 - **Python** 3.12.9
 - **Streamlit** 1.50.0 – Interactive UI
 - **Matplotlib** 3.10.7 – Visualization and plotting
+- **Graphviz** 0.21 - Merge Sort visualization
 
 Dependencies are kept intentionally light to maintain accessibility for students.
 
