@@ -2,6 +2,7 @@ import time
 import streamlit as st
 import matplotlib.pyplot as plt
 import random
+import graphviz
 
 def generate_array(size):
     array = [random.randint(-100, 100) for _ in range(size)]
