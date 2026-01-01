@@ -1,5 +1,4 @@
 import streamlit as st
-
 from algorithms.sorting import visual_merge
 from visuals import sorting_vis
 from algorithms import sorting

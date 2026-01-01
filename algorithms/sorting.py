@@ -253,12 +253,17 @@ def merge_sort(list_to_sort: List, speed= 1, ascending: bool = True) -> list[Any
         st.write("Base case reached: list length <= 1 so stop splitting sub-array into left and right halves")
         return list_to_sort
     else:
+        st.write("Break down sub-array")
+        sorting_vis.render_merge_step(left_half[:list_length//2], left_half[list_length//2:], separate= False, speed= speed)
         left_half = merge_sort(left_half)
+        st.write("Break down sub-array")
+        sorting_vis.render_merge_step(right_half[:list_length//2], right_half[list_length//2:], separate= False, speed= speed)
         right_half = merge_sort(right_half)
-        st.write("Merge Sorted Sub-Arrays")
+        st.write("Merge sorted sub-arrays")
         sorting_vis.render_merge_step(left_half, right_half, merge= True, speed= speed)
         sorted_sub_array = merge(left_half, right_half)
         sorting_vis.render_merge_step(sorted_sub_array[:list_length//2], sorted_sub_array[list_length//2:], separate= False, speed= speed)
+        st.write("Merged sub-array sorted")
         return sorted_sub_array
 
 

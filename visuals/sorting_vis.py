@@ -2,7 +2,6 @@ import time
 import streamlit as st
 import matplotlib.pyplot as plt
 import random
-import graphviz
 
 def generate_array(size):
     array = [random.randint(-100, 100) for _ in range(size)]
@@ -100,27 +99,32 @@ def render_array_with_pivot(array, highlight_indices= None, swap_indices= None, 
         time.sleep(1 / speed)
 
 #For rendering side by side arrays, not capable of highlighting specific indexes with arrays
-def render_merge_step(left, right, speed= 1, separate= True, merge= False):
-    graph = graphviz.Digraph()
-    graph.attr(rankdir='LR')
+def render_merge_step(left, right, speed=1, separate=True, merge=False):
+    #start building the DOT string
+    dot = "digraph {\n"
+    dot += "    rankdir=LR;\n"  # left-to-right layout
 
-    #render whole array without distinguishing left and right
     if not separate:
+        #render whole array without distinguishing left and right
         whole_array = left + right
-        graph.node("array", f"Array | {{ {' | '.join(str(v) for v in whole_array)} }}", shape="record", style="filled", fillcolor="#00CCCC")
-    #distinguish left and right using colors
+        label = "Array | { " + " | ".join(str(v) for v in whole_array) + " }"
+        dot += f'    array [label="{label}", shape=record, style=filled, fillcolor="#00CCCC"];\n'
     else:
-        graph.node("left", f"Left | {{ {' | '.join(str(v) for v in left)} }}", shape= "record", style= "filled", fillcolor= "#99FFCC")
-        graph.node("right", f"Right | {{ {' | '.join(str(v) for v in right)} }}", shape= "record", style= "filled", fillcolor= "#66CCFF")
+        #distinguish left and right using colors
+        dot += f'    left [label="Left | {{ {" | ".join(str(v) for v in left)} }}", shape=record, style=filled, fillcolor="#99FFCC"];\n'
+        dot += f'    right [label="Right | {{ {" | ".join(str(v) for v in right)} }}", shape=record, style=filled, fillcolor="#66CCFF"];\n'
 
-    #indicate a merge (with a label and bidirectional link) between left and right side arrays
-    if merge:
-        graph.edge("left", "right", dir= "both", label= "merge", color= "gray")
-    #indicate a non-directional link between left and right side arrays
-    elif separate:
-        graph.edge("left", "right", dir= "none", color= "gray")
+        #indicate a merge (with a label and bidirectional link) between left and right side arrays
+        if merge:
+            dot += '    left -> right [dir=both, label="merge", color="gray"];\n'
+        #indicate a non-directional link between left and right side arrays
+        else:
+            dot += '    left -> right [dir=none, color="gray"];\n'
 
-    st.graphviz_chart(graph)
+    dot += "}"  # close the digraph
+
+    #render the DOT string with Streamlit
+    st.graphviz_chart(dot)
 
     if speed != "Instant":
         time.sleep(1 / speed)
@@ -175,13 +179,11 @@ def render_heap(array, highlight_indices= None, swap_indices= None, speed= 1):
 def render_heap_tree(array, highlight_indices= None, swap_indices= None, speed= 1):
     array_length = len(array)
 
-    #For empty arrays do not attempt to graph
+    #for empty arrays do not attempt to graph
     if array_length == 0:
         return
 
-    heap = graphviz.Digraph()
-
-    #Return appropriate color for node depending on index
+    #return appropriate color for node depending on index
     def node_color(index):
         if highlight_indices and index in highlight_indices:
             return "#99FFCC"
@@ -189,27 +191,30 @@ def render_heap_tree(array, highlight_indices= None, swap_indices= None, speed= 
             return "#00CC66"
         return "#00CCCC"
 
-    #Create nodes
-    for i, val in enumerate(array):
-        heap.node(
-            name=f"node_{i}",
-            label=f"{val}",
-            style="filled",
-            fillcolor=node_color(i),
-            fontcolor="black"
-        )
+    #start DOT string
+    dot = "digraph {\n"
+    dot += "    rankdir=TB;\n"  # top-to-bottom layout
+    dot += "    node [style=filled, fontcolor=black];\n"
 
-    #Create edges
+    #create nodes
+    for i, val in enumerate(array):
+        color = node_color(i)
+        dot += f'    node_{i} [label="{val}", fillcolor="{color}"];\n'
+
+    #create edges for parent -> children
     for parent_index in range(array_length):
         left_child = 2 * parent_index + 1
         right_child = 2 * parent_index + 2
 
         if left_child < array_length:
-            heap.edge(f"node_{parent_index}", f"node_{left_child}")
+            dot += f'    node_{parent_index} -> node_{left_child};\n'
         if right_child < array_length:
-            heap.edge(f"node_{parent_index}", f"node_{right_child}")
+            dot += f'    node_{parent_index} -> node_{right_child};\n'
 
-    st.graphviz_chart(heap)
+    dot += "}"  # close digraph
+
+    # Render in Streamlit
+    st.graphviz_chart(dot)
 
     if speed != "Instant":
         time.sleep(1 / speed)
