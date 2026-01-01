@@ -55,7 +55,7 @@ Dependencies are kept intentionally light to maintain accessibility for students
 
 The easiest way to use this project is through the Streamlit Community Cloud by clicking on this link: https://dsa-visualizer-ec2en446yacdpgrm9gcaxu.streamlit.app/
 
-Note: This project will run a bit slower on Streamlit Community Cloud than it will running locally. This is only really a problem when using the "instantaneous" speed setting.
+Note: This project will run a bit slower on Streamlit Community Cloud than it will running locally. This is only really a problem when using the "instant" speed setting.
 
 Otherwise, if you'd like to run this project on your own machine, follow the steps below.
 
