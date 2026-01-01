@@ -1,7 +1,7 @@
 import streamlit as st
 
-import numpy as np
-import pandas as pd
+
+st.set_page_config(page_title="DSA Visualizer", page_icon="./screenshots/DSA_Visualizer_Favicon.png")
 
 st.title('Data Structures & Algorithms Visualizer')
 st.write("A Project by Wes Parker")
