@@ -211,9 +211,9 @@ def render_heap_tree(array, highlight_indices= None, swap_indices= None, speed= 
         if right_child < array_length:
             dot += f'    node_{parent_index} -> node_{right_child};\n'
 
-    dot += "}"  # close digraph
+    dot += "}"  #close digraph
 
-    # Render in Streamlit
+    #render in Streamlit
     st.graphviz_chart(dot)
 
     if speed != "Instant":
