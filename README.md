@@ -125,13 +125,13 @@ Example of an algorithm description (Insertion Sort):<br>
 ![Insertion Sort Description](screenshots/Insertion_Sort.png)
 
 Example of algorithm visualization (Quick Sort):<br>
-![Insertion Sort Description](screenshots/Quick_Sort.png)
+![Snippet of quick sort visualization](screenshots/Quick_Sort.png)
 
 Example of options available to visualize some algorithms differently (Heap Sort):<br>
-![Insertion Sort Description](screenshots/Heap_Sort_Options.png)
+![Options for the heap sort visualization](screenshots/Heap_Sort_Options.png)
 
 Heap Sort as array:<br>
-![Insertion Sort Description](screenshots/Array_Heap_Sort.png)
+![The heap sort visualization shown as an array](screenshots/Array_Heap_Sort.png)
 
 Heap Sort as Tree:<br>
-![Insertion Sort Description](screenshots/Tree_Heap_Sort.png)
+![The heap sort visualization shown as a tree](screenshots/Tree_Heap_Sort.png)
