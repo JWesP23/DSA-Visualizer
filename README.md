@@ -71,7 +71,7 @@ Clone the repository:
 
 git clone https://github.com/JWesP23/DSA-Visualizer
 
-cd data-structures-visualizer
+cd DSA-Visualizer
 
 
 ### Create a virtual environment (recommended):
@@ -92,6 +92,7 @@ pip install -r requirements.txt
 ### Running the Visualizer
 
 ```bash
+cd data-structures-visualizer
 streamlit run DSA_Visualizer.py
 ```
 
