@@ -69,10 +69,10 @@ pip package manager
 
 Clone the repository:
 
+```bash
 git clone https://github.com/JWesP23/DSA-Visualizer
-
 cd DSA-Visualizer
-
+```
 
 ### Create a virtual environment (recommended):
 Using a virtual environment helps avoid dependency conflicts.
