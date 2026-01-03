@@ -92,7 +92,6 @@ pip install -r requirements.txt
 ### Running the Visualizer
 
 ```bash
-cd data-structures-visualizer
 streamlit run DSA_Visualizer.py
 ```
 
