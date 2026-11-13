@@ -29,11 +29,11 @@ This tool currently supports the following algorithms:
   - Doubly Linked
   - Circular
 
- - Tree Structures:
-  - Pre-Order, Post-Order, In-Order, and Level-Order traversal.
-  - Binary Search Trees
-  - Red-Black Trees
-  - Tries
+- Tree Structures:
+    - Pre-Order, Post-Order, In-Order, and Level-Order traversal.
+    - Binary Search Trees
+    - Red-Black Trees
+    - Tries
 
 ## Planned Updates
 
