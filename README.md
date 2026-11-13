@@ -3,6 +3,9 @@
 
 An interactive tool I initially developed to teach common data structures and algorithms to students I tutor. This is a visualization tool built using Python, Matplotlib, and Streamlit. This project is designed for learning or teaching data structures using step-by-step visuals.
 
+Front Page:<br>
+![Front Page](screenshots/Front_Page.png)
+
 ## Features
 
 Each algorithm includes a detailed description of how the algorithm works as well as annotations for important steps within the algorithm.
@@ -134,3 +137,9 @@ Heap Sort as array:<br>
 
 Heap Sort as Tree:<br>
 ![The heap sort visualization shown as a tree](screenshots/Tree_Heap_Sort.png)
+
+Doubly Linked List:<br>
+![Doubly Linked List Example](screenshots/Doubly_Linked_Lists.png)
+
+Red/Black Tree:<br>
+![Red/Black Tree Example](screenshots/Red_Black_Tree.png)
