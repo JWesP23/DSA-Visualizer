@@ -60,7 +60,7 @@ match algorithm:
                  "The average runtime of a heap sort is O(nlog(n)).")
         heap_display = st.radio(
             "How do you want to view the heap?",
-            ["Array :computer:", "Tree :deciduous_tree:"],
+            ["Array", "Tree"],
             captions=[
                 "Shows a heap programmed as an array (more efficient)",
                 "Easily understood visually",
@@ -75,7 +75,7 @@ match algorithm:
                  "The average runtime for a quick sort is O(nlog(n)).")
         sort_type = st.radio(
             "How do you want to handle pivot selection?",
-            ["Arbitrarily :point_up:", "Random :zany:", "Median of three :monocle:"],
+            ["Arbitrarily", "Random", "Median of three"],
             captions=[
                 "Arbitrarily selects the first element as the pivot (inefficient if the array is semi-sorted)",
                 "Randomly selects the pivot from the array (less likely to be inefficient for a semi-sorted array)",
