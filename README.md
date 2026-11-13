@@ -26,6 +26,17 @@ This tool currently supports the following algorithms:
 - Searching Algorithms:
     - Sequential Search
     - Binary Search
+ 
+- Linked Lists:
+  - Singly Linked
+  - Doubly Linked
+  - Circular
+
+- Tree Structures:
+    - Pre-Order, Post-Order, In-Order, and Level-Order traversal.
+    - Binary Search Trees
+    - Red-Black Trees
+    - Tries
 
 ## Planned Updates
 
@@ -34,15 +45,12 @@ This tool currently supports the following algorithms:
     - Insertion Sort using two arrays
 
 - Tree Structures:
-  - Binary Search Trees
   - AVL Trees
-  - Red-Black Trees
 - Graph Algorithms:
   - Breadth-First/Depth-First Search
   - Dijkstra's Algorithm
   - Prim's Algorithm
 - Other Data Structures:
-  - Linked Lists
   - Stacks/Queues
   - Hash Tables
 
